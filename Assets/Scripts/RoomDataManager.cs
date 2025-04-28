@@ -14,7 +14,7 @@ public class RoomDataManager : MonoBehaviour
         {
             GameObject newRoom =  Instantiate(prefabRoom);
             newRoom.transform.SetParent(transform);
-            ListLobbyCreate lobbyCreateScript = newRoom.GetComponent<ListLobbyCreate>();
+            UILobbyListCreated lobbyCreateScript = newRoom.GetComponent<UILobbyListCreated>();
             lobbyCreateScript.SetUpData(room);
         }
     }

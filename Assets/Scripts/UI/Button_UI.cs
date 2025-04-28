@@ -40,7 +40,7 @@ public class Button_UI :  MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         if(btnType == ButtonType.Toggle) SetToggle();
 
-        ClickFunc.Invoke();
+        ClickFunc?.Invoke();
     }
 
     public void OnPointerDown(PointerEventData eventData)

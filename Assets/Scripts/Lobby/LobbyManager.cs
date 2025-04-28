@@ -1,0 +1,198 @@
+using System;
+using System.Collections.Generic;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class LobbyManager : Singleton<LobbyManager>
+{
+
+      
+    IAuthentication authentication;
+    public const string KEY_PLAYER_NAME = "PlayerName";
+    public const string KEY_PLAYER_CHARACTER = "Character";
+    public const string KEY_GAME_MODE = "GameMode";
+    public event EventHandler OnLeftLobby;
+
+    public event EventHandler<LobbyEventArgs> OnJoinedLobby;
+    public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
+    public event EventHandler<LobbyEventArgs> OnKickedFromLobby;
+    public event EventHandler<LobbyEventArgs> OnLobbyGameModeChanged;
+    
+    public class LobbyEventArgs : EventArgs {
+        public Lobby lobby;
+    }
+    public event EventHandler<OnLobbyListChangedEventArgs> OnLobbyListChanged;
+    public class OnLobbyListChangedEventArgs : EventArgs {
+        public List<Lobby> lobbyList;
+    }
+
+
+    public enum GameMode {
+        CaptureTheFlag,
+        Conquest,
+        Survive,
+        PickUpCoins
+    }
+
+    public enum PlayerCharacter {
+        Marine,
+        Ninja,
+        Zombie
+    }
+    private float heartbeatTimer;
+    private float lobbyPollTimer;
+    private float refreshLobbyListTimer = 5f;
+    private Lobby joinedLobby;
+    private string playerName;
+
+    private void Awake() {
+        authentication = new Anonymous();
+        authentication.AuthenticationAsync();
+    }
+    private void Update() {
+        HandleLobbyHeartbeat();
+        HandleRefreshLobbyList();
+    }
+    private async void HandleLobbyHeartbeat() {
+        if (IsLobbyHost()) {
+            heartbeatTimer -= Time.deltaTime;
+            if (heartbeatTimer < 0f) {
+                float heartbeatTimerMax = 15f;
+                heartbeatTimer = heartbeatTimerMax;
+
+                Debug.Log("Heartbeat");
+                await LobbyService.Instance.SendHeartbeatPingAsync(joinedLobby.Id);
+            }
+        }
+    }
+    private void HandleRefreshLobbyList() {
+        if (UnityServices.State == ServicesInitializationState.Initialized && AuthenticationService.Instance.IsSignedIn) {
+            refreshLobbyListTimer -= Time.deltaTime;
+            if (refreshLobbyListTimer < 0f) {
+                float refreshLobbyListTimerMax = 5f;
+                refreshLobbyListTimer = refreshLobbyListTimerMax;
+
+                RefreshLobbyList();
+            }
+        }
+    }
+    public bool IsLobbyHost() {
+        return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
+    }
+    private Player GetPlayer() {
+        return new Player(AuthenticationService.Instance.PlayerId, null, new Dictionary<string, PlayerDataObject> {
+            { KEY_PLAYER_NAME, new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, playerName) },
+            { KEY_PLAYER_CHARACTER, new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, PlayerCharacter.Marine.ToString()) }
+        });
+    }
+    public async void CreateLobby(string lobbyName, int maxPlayers, bool isPrivate, GameMode gameMode, Sprite sprite)
+    {
+        //convert form sprite to  string
+        //string base64String = SpriteHelper.SpriteToBase64(sprite); 
+
+        Player player = GetPlayer();
+
+        CreateLobbyOptions options = new CreateLobbyOptions {
+            Player = player,
+            IsPrivate = isPrivate,
+            IsLocked = false,
+            Data = new Dictionary<string, DataObject> {
+                { KEY_GAME_MODE, new DataObject(DataObject.VisibilityOptions.Public, gameMode.ToString()) },
+                { "Max Player", new DataObject(DataObject.VisibilityOptions.Public, maxPlayers.ToString()) },
+            }
+        };
+
+        Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
+
+        joinedLobby = lobby;
+        Debug.Log(joinedLobby.LobbyCode);
+
+        OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+
+        Debug.Log("Created Lobby " + lobby.Name);
+    }
+
+    public async void JoinLobbyByCode(string lobbyCode) {
+        Player player = GetPlayer();
+
+        Lobby lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode, new JoinLobbyByCodeOptions {
+            Player = player
+        });
+
+        joinedLobby = lobby;
+
+        OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+    }
+    public async void JoinLobby(Lobby lobby) {
+        Player player = GetPlayer();
+
+        joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobby.Id, new JoinLobbyByIdOptions {
+            Player = player
+        });
+
+        OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+    }
+    public async void QuickJoinLobby() {
+        try {
+            QuickJoinLobbyOptions options = new QuickJoinLobbyOptions();
+
+            Lobby lobby = await LobbyService.Instance.QuickJoinLobbyAsync(options);
+            joinedLobby = lobby;
+
+            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+        } catch (LobbyServiceException e) {
+            Debug.Log(e);
+        }
+    }
+    public async void RefreshLobbyList() {
+        try {
+            QueryLobbiesOptions options = new QueryLobbiesOptions();
+            options.Count = 25;
+
+            // Filter for open lobbies only 
+            options.Filters = new List<QueryFilter> {
+                new QueryFilter(
+                    field: QueryFilter.FieldOptions.AvailableSlots,
+                    op: QueryFilter.OpOptions.GT,
+                    value: "0")
+            };
+
+            // Order by newest lobbies first
+            options.Order = new List<QueryOrder> {
+                new QueryOrder(
+                    asc: false,
+                    field: QueryOrder.FieldOptions.Created)
+            };
+
+            QueryResponse lobbyListQueryResponse = await LobbyService.Instance.QueryLobbiesAsync();
+            Debug.Log(lobbyListQueryResponse.Results.Count);
+            OnLobbyListChanged?.Invoke(this, new OnLobbyListChangedEventArgs { lobbyList = lobbyListQueryResponse.Results });
+        } catch (LobbyServiceException e) {
+            Debug.Log(e);
+        }
+    }
+
+    private Player GetPlayerOpption()
+    {
+        return new Player
+        {
+            Data = new Dictionary<string, PlayerDataObject>
+            {
+                { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)},
+            }
+        };
+    }
+    public async void KickPlayer(string playerId) {
+        if (IsLobbyHost()) {
+            try {
+                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, playerId);
+            } catch (LobbyServiceException e) {
+                Debug.Log(e);
+            }
+        }
+    }
+}
