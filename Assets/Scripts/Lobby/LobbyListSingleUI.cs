@@ -8,8 +8,6 @@ public class LobbyListSingleUI : MonoBehaviour
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI player;
     [SerializeField] private TextMeshProUGUI gameModeText;
-
-
     private Lobby lobby;
     private void Awake() {
         GetComponentInChildren<Button>().onClick.AddListener(() => {
@@ -20,7 +18,6 @@ public class LobbyListSingleUI : MonoBehaviour
         this.lobby = lobby;
         player.text = lobby.Players.Count + "/" + lobby.MaxPlayers;
         gameModeText.text = lobby.Data[LobbyManager.KEY_GAME_MODE].Value;
-        // image.sprite = SpriteHelper.Base64ToSprite(lobby.Data["Image"].Value);
     }
 
 }

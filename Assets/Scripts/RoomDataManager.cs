@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RoomDataManager : MonoBehaviour
 {
+    [SerializeField] private Transform screens;
     public GameObject prefabRoom;
     public Room[] rooms;
 

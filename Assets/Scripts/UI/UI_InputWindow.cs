@@ -33,7 +33,7 @@ public class UI_InputWindow : MonoBehaviour {
         cancelBtn.SetHoverBehaviourType();
     }
     private void Start() {
-        
+       
     }
     private void Show(string titleString, string inputString, string validCharacters, int characterLimit, Action onCancel, Action<string> onOk) {
         gameObject.SetActive(true);

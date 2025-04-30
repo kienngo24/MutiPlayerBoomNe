@@ -49,13 +49,14 @@ public class LobbyManager : Singleton<LobbyManager>
     private Lobby joinedLobby;
     private string playerName;
 
-    private void Awake() {
+    private void Start() {
         authentication = new Anonymous();
         authentication.AuthenticationAsync();
     }
     private void Update() {
         HandleLobbyHeartbeat();
         HandleRefreshLobbyList();
+        HandleLobbyPolling();
     }
     private async void HandleLobbyHeartbeat() {
         if (IsLobbyHost()) {
@@ -79,6 +80,39 @@ public class LobbyManager : Singleton<LobbyManager>
                 RefreshLobbyList();
             }
         }
+    }
+    private async void HandleLobbyPolling() {
+        if (joinedLobby != null) {
+            lobbyPollTimer -= Time.deltaTime;
+            if (lobbyPollTimer < 0f) {
+                float lobbyPollTimerMax = 1.1f;
+                lobbyPollTimer = lobbyPollTimerMax;
+
+                joinedLobby = await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
+
+                OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+
+                if (!IsPlayerInLobby()) {
+                    // Player was kicked out of this lobby
+                    Debug.Log("Kicked from Lobby!");
+
+                    OnKickedFromLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+
+                    joinedLobby = null;
+                }
+            }
+        }
+    }
+    private bool IsPlayerInLobby() {
+        if (joinedLobby != null && joinedLobby.Players != null) {
+            foreach (Player player in joinedLobby.Players) {
+                if (player.Id == AuthenticationService.Instance.PlayerId) {
+                    // This player is in this lobby
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     public bool IsLobbyHost() {
         return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
@@ -175,7 +209,27 @@ public class LobbyManager : Singleton<LobbyManager>
             Debug.Log(e);
         }
     }
-
+    public async void UpdatePlayerCharacter(PlayerCharacter playerCharacter)
+    {
+        if(joinedLobby != null)
+        {
+            try
+            {
+                UpdatePlayerOptions options = new UpdatePlayerOptions();
+                options.Data = new Dictionary<string, PlayerDataObject>{ 
+                    { KEY_PLAYER_CHARACTER, new PlayerDataObject(visibility : PlayerDataObject.VisibilityOptions.Public,value: playerCharacter.ToString()) },
+                };
+                string playerId = AuthenticationService.Instance.PlayerId;
+                Lobby lobby = await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id,playerId,options);
+                joinedLobby = lobby;
+                OnJoinedLobbyUpdate?.Invoke(this,new LobbyEventArgs{lobby = joinedLobby});
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+    }
     private Player GetPlayerOpption()
     {
         return new Player
@@ -185,6 +239,9 @@ public class LobbyManager : Singleton<LobbyManager>
                 { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)},
             }
         };
+    }
+    public Lobby GetJoinedLobby() {
+        return joinedLobby;
     }
     public async void KickPlayer(string playerId) {
         if (IsLobbyHost()) {

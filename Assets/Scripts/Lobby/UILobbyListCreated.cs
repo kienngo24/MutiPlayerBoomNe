@@ -7,7 +7,6 @@ using static LobbyManager;
 
 public class UILobbyListCreated : MonoBehaviour
 {
-
     [SerializeField] private GameMode gameMode;
     [SerializeField] private Button_UI btnMaxPlayer;
     [SerializeField] private Button_UI btnIsPrivate;
@@ -36,7 +35,7 @@ public class UILobbyListCreated : MonoBehaviour
         isPrivate = btnIsPrivate.GetToggle();
         btnCreate.ClickFunc = () =>
         {
-            Debug.Log("Play : "+ isPrivate.ToString() + " " + gameMode.ToString() + " " +maxPlayers.ToString());
+            Debug.Log("Play : "+ isPrivate.ToString() + " " + gameMode.ToString() + " " + maxPlayers.ToString());
             LobbyManager.Instance.CreateLobby("Lobby Room",maxPlayers,isPrivate, gameMode,avatar.sprite);
         };
         btnIsPrivate.ClickFunc = () =>
