@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using TMPro;
@@ -16,6 +17,9 @@ public class UILobbyListCreated : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txtMaxPlayer;
     private bool isPrivate;
     private int maxPlayers = 1;
+
+    private float lastCreateTime = 0f;
+    private float createCooldown = 1.1f;
     private void Awake() {
         btnCreate = GetComponentsInChildren<Button_UI>().FirstOrDefault(btn => btn.gameObject.name == "btnCreate");
         btnIsPrivate = GetComponentsInChildren<Button_UI>().FirstOrDefault(btn => btn.gameObject.name == "btnIsPrivate");
@@ -24,7 +28,6 @@ public class UILobbyListCreated : MonoBehaviour
 
         txtMaxPlayer = transform.Find("MaxPlayer/txtMaxPlayer").GetComponent<TextMeshProUGUI>();
         txtGameMode = transform.Find("txtGameMode").GetComponent<TextMeshProUGUI>();
-        
     }
     
     private void Start() {
@@ -35,8 +38,12 @@ public class UILobbyListCreated : MonoBehaviour
         isPrivate = btnIsPrivate.GetToggle();
         btnCreate.ClickFunc = () =>
         {
-            Debug.Log("Play : "+ isPrivate.ToString() + " " + gameMode.ToString() + " " + maxPlayers.ToString());
-            LobbyManager.Instance.CreateLobby("Lobby Room",maxPlayers,isPrivate, gameMode,avatar.sprite);
+            if(Time.time > lastCreateTime + createCooldown)
+            {
+                lastCreateTime = Time.time;
+                Debug.Log("Play : "+ isPrivate.ToString() + " " + gameMode.ToString() + " " + maxPlayers.ToString());
+                LobbyManager.Instance.CreateLobby("Lobby Room",maxPlayers,isPrivate, gameMode,avatar.sprite);
+            }
         };
         btnIsPrivate.ClickFunc = () =>
         {
@@ -45,7 +52,7 @@ public class UILobbyListCreated : MonoBehaviour
         };
         btnMaxPlayer.ClickFunc = () =>
         {
-            UI_InputWindow.Show_Static("Player Name", maxPlayers.ToString(), "123456789", 1,
+            UI_InputWindow.Show_Static("Player Count", maxPlayers.ToString(), "1234", 1,
             () => {
                 // Cancel
             },
@@ -54,9 +61,13 @@ public class UILobbyListCreated : MonoBehaviour
                 maxPlayers = int.Parse(newName);
             });
         };
+
     }
+
+   
     public void SetUpData(Room room)
     {
+
         txtGameMode.text = room.gameMode.ToString();
         txtMaxPlayer.text = "max player "  + room.maxPlayers.ToString();
         maxPlayers = room.maxPlayers;

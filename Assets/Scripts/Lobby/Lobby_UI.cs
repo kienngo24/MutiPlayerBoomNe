@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using static LobbyManager;
 
-public class UILobby : Singleton<UILobby>
+public class Lobby_UI : Singleton<Lobby_UI>
 {
     [SerializeField] private Transform playerSingleTemplate;
     [SerializeField] private Transform container;
@@ -22,19 +23,22 @@ public class UILobby : Singleton<UILobby>
         LobbyManager.Instance.OnJoinedLobby += UpdateLobby_Event;
         LobbyManager.Instance.OnLeftLobby += LobbyManager_OnLeftLobby;
         LobbyManager.Instance.OnKickedFromLobby += LobbyManager_OnKickedFromLobby;
+        LobbyManager.Instance.OnRemoveLobby += LobbyManager_OnRemoveLobby;
 
     }
-        private void LobbyManager_OnKickedFromLobby(object sender, LobbyManager.LobbyEventArgs e) {
+
+    
+
+    private void LobbyManager_OnRemoveLobby(object sender, EventArgs e)
+    {
         ScreenManager.Instance.NavigateBack();
-
     }
-
     private void LobbyManager_OnLeftLobby(object sender, EventArgs e) {
         ScreenManager.Instance.NavigateBack();
     }
-
-
-
+    private void LobbyManager_OnKickedFromLobby(object sender, LobbyManager.LobbyEventArgs e) {
+        ScreenManager.Instance.NavigateBack();
+    }
     private void UpdateLobby_Event(object sender, LobbyManager.LobbyEventArgs e) {
         UpdateLobby();
     }
@@ -69,5 +73,6 @@ public class UILobby : Singleton<UILobby>
             Destroy(child.gameObject);
         }
     }
+    
 
 }

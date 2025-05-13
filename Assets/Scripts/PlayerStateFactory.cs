@@ -15,7 +15,6 @@ public class PlayerStateFactory : IStateFactory
     {
         var Playerdictionary = new Dictionary<Type, IState>
         {
-            {typeof(GroundState_Player), new GroundState_Player(_player, _machine, "Idle")},
             {typeof(IdleState_Player), new IdleState_Player(_player, _machine, "Idle")},
             {typeof(MoveState_Player), new MoveState_Player(_player, _machine, "Move")}
         };

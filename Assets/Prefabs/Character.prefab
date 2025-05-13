@@ -312,7 +312,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4, y: -4.0000153}
+  m_AnchoredPosition: {x: 4, y: -4.0000305}
   m_SizeDelta: {x: -8, y: -8}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &8408236353119781501
@@ -539,7 +539,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.32240295, y: -10.7}
+  m_AnchoredPosition: {x: 0.32240295, y: -10.700012}
   m_SizeDelta: {x: -34.189, y: 129.3}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &6417402803962058722
@@ -855,8 +855,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3168262060097850106}
   - component: {fileID: 4021463692715771281}
+  - component: {fileID: 8246364983205883153}
   m_Layer: 5
-  m_Name: Charactor
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -869,7 +870,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6999055010564761466}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -901,6 +902,26 @@ MonoBehaviour:
   playerNameText: {fileID: 5235930261741567216}
   characterImage: {fileID: 6395621669193408036}
   kickPlayerButton: {fileID: 2099501638357466927}
+--- !u!114 &8246364983205883153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6999055010564761466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 318d975b8d9283a4c8f0b903d5732a00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsFocus: []
+  imagesFocus:
+  - {fileID: 6773270018986495094}
+  - {fileID: 6772430384171179873}
+  - {fileID: 2343112983064349222}
+  txtFocuses: []
+  hoverBehaviour_Color_Enter: {r: 0.9254902, g: 0.87058824, b: 0.29411766, a: 1}
+  hoverBehaviour_Color_Exit: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &7663526617074852329
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,9 +2,8 @@ using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class RoomDataManager : MonoBehaviour
+public class GameModeSelection_UI : MonoBehaviour
 {
-    [SerializeField] private Transform screens;
     public GameObject prefabRoom;
     public Room[] rooms;
 

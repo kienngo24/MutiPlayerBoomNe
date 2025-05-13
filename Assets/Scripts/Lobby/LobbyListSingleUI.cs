@@ -9,9 +9,16 @@ public class LobbyListSingleUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI player;
     [SerializeField] private TextMeshProUGUI gameModeText;
     private Lobby lobby;
+
+    private float lastJoinTime = 0f;
+    private float joinCooldown = 1.1f;
     private void Awake() {
         GetComponentInChildren<Button>().onClick.AddListener(() => {
-            LobbyManager.Instance.JoinLobby(lobby);
+            if(Time.time > lastJoinTime + joinCooldown)
+            {
+                lastJoinTime = Time.time;
+                LobbyManager.Instance.JoinLobby(lobby);
+            }
         });  
     }
     public void UpdateLobby(Lobby lobby) {

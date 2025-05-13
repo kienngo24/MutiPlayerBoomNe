@@ -9,14 +9,14 @@ public class MoveState_Player : GroundState_Player
     public override void Enter()
     {
         base.Enter();
-        _stateTimer = 4;
+        m_stateTimer = 4;
     }
 
     public override void Excute()
     {
         base.Excute();
-        if(_stateTimer < 0)
-            _machine.ChangeState<IdleState_Player>();
+        if(m_player.m_movement.GetPosstion().magnitude == 0)
+            m_machine.ChangeState<IdleState_Player>();
     }
 
     public override void Exit()

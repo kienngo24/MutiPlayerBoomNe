@@ -40,12 +40,18 @@ public class ScreenManager : Singleton<ScreenManager>
         m_Screens.Add("GameMode", m_GameModde);
         m_Screens.Add("CharacterSelect", m_CharacterSelect);
     }
-    private void Start() {
+    private void Start()
+    {
+        StartUI();
+    }
+
+    private void StartUI()
+    {
         foreach (var ui in m_Screens)
             Hide(ui.Value);
         NavigateTo("GameMenu");
     }
-    private void Hide(GameObject gameObject) => gameObject.SetActive(false);
+
 
     public void NavigateTo(string screenName, object data = null)
     {
@@ -60,6 +66,26 @@ public class ScreenManager : Singleton<ScreenManager>
             m_NavigationStack.Pop();
             OnStackChanged();
         }
+    }
+    [ContextMenu("Hide UI")]
+    public void HideUI()
+    {
+        while (m_NavigationStack.Count > 1)
+        {
+            NavigateBack();
+        }
+        if(m_NavigationStack.Count == 1 && m_NavigationStack.Peek().ScreenName == "GameMenu")
+        {
+            var screenName = m_NavigationStack.Peek().ScreenName;
+            if (m_Screens.ContainsKey(screenName))
+            {
+                m_CurrentScreen = m_Screens[screenName];
+                m_CurrentScreen.SetActive(false);
+                m_CurrentScreen = null;
+            }
+            m_NavigationStack.Pop();
+        }
+
     }
     public void OnStackChanged()
     {
@@ -79,7 +105,6 @@ public class ScreenManager : Singleton<ScreenManager>
             }
         }
     }
-
     public object GetNavigationData()
     {
         if (m_NavigationStack.Count > 0)
@@ -91,4 +116,6 @@ public class ScreenManager : Singleton<ScreenManager>
     }
     public int GetStackSize() => m_NavigationStack.Count; 
     public string GetCurrentScreen() => m_CurrentScreen.gameObject.name;
+    private void Show(GameObject gameObject) => gameObject.SetActive(true);
+    private void Hide(GameObject gameObject) => gameObject.SetActive(false);
 }

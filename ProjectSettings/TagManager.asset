@@ -13,9 +13,9 @@ TagManager:
   - UI
   - Player
   - Ground
-  - 
-  - 
-  - 
+  - Aim
+  - Bullet
+  - Box
   - 
   - 
   - 
@@ -46,6 +46,21 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 937606123
+    locked: 0
+  - name: Enemy
+    uniqueID: 736818657
+    locked: 0
+  - name: Aim
+    uniqueID: 3873344355
+    locked: 0
+  - name: Sword
+    uniqueID: 1696842049
+    locked: 0
+  - name: Bullet
+    uniqueID: 1148458263
+    locked: 0
+  - name: Partical
+    uniqueID: 651425435
     locked: 0
   m_RenderingLayers:
   - Default

@@ -6,19 +6,22 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LobbyListUI : MonoBehaviour {
+public class RoomSelection_UI : MonoBehaviour {
 
 
-    public static LobbyListUI Instance { get; private set; }
+    public static RoomSelection_UI Instance { get; private set; }
 
 
     [SerializeField] private Transform parent;
     [SerializeField] private Transform lobbySingleTemplate;
     [SerializeField] private Transform container;
     [SerializeField] private Button refreshButton;
-    [SerializeField] private Button backRoom;
-    [SerializeField] private Button_UI joincode;  
+    [SerializeField] private Button_UI joincode;
     private string code ="";
+    private float lastRefeshTime = 0f;
+    private float refreshCooldown = 2.1f;
+    private float lastJoinTime = 0f;
+    private float joinCooldown = 1.1f;
 
     private void Awake() {
         Instance = this;
@@ -26,16 +29,19 @@ public class LobbyListUI : MonoBehaviour {
         lobbySingleTemplate.gameObject.SetActive(false);
 
         refreshButton.onClick.AddListener(RefreshButtonClick);
-        //createLobbyButton.onClick.AddListener(CreateLobbyButtonClick);
         joincode.ClickFunc = () => 
         {
-            UI_InputWindow.Show_Static("Player Name", code, "abcdefghijklmnopqrstuvxywzABCDEFGHIJKLMNOPQRSTUVXYWZ123456789", 10,
+            UI_InputWindow.Show_Static("Enter Code", code, "abcdefghijklmnopqrstuvxywzABCDEFGHIJKLMNOPQRSTUVXYWZ123456789", 10,
             () => {
                 // Cancel
             },
             (string newName) => {
-                code = newName;
-                LobbyManager.Instance.JoinLobbyByCode(code);
+                if(Time.time > lastJoinTime + joinCooldown)
+                {
+                    lastJoinTime = Time.time;
+                    code = newName;
+                    LobbyManager.Instance.JoinLobbyByCode(code);
+                }
             });
         };
     }
@@ -47,21 +53,16 @@ public class LobbyListUI : MonoBehaviour {
         LobbyManager.Instance.OnKickedFromLobby += LobbyManager_OnKickedFromLobby;
 
     }
-    
     private void LobbyManager_OnKickedFromLobby(object sender, LobbyManager.LobbyEventArgs e) {
         ScreenManager.Instance.NavigateBack();
-        backRoom.gameObject.SetActive(false);
     }
 
     private void LobbyManager_OnLeftLobby(object sender, EventArgs e) {
         ScreenManager.Instance.NavigateBack();
-        backRoom.gameObject.SetActive(false);
     }
 
     private void LobbyManager_OnJoinedLobby(object sender, LobbyManager.LobbyEventArgs e) {
-        Debug.Log("CharacterSelect");
         ScreenManager.Instance.NavigateTo("CharacterSelect");
-        backRoom.gameObject.SetActive(true);
     }
 
     private void LobbyManager_OnLobbyListChanged(object sender, LobbyManager.OnLobbyListChangedEventArgs e) {
@@ -84,11 +85,12 @@ public class LobbyListUI : MonoBehaviour {
     }
 
     private void RefreshButtonClick() {
-        LobbyManager.Instance.RefreshLobbyList();
-    }
-
-    public void CreateLobbyButtonClick() {
-        parent.gameObject.SetActive(false);  
+        if(Time.time > lastRefeshTime + refreshCooldown)
+        {
+            lastRefeshTime = Time.time;
+            LobbyManager.Instance.RefreshLobbyList();
+        }
+        
     }
 
 }

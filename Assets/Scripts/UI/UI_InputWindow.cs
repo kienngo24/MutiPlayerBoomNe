@@ -42,6 +42,7 @@ public class UI_InputWindow : MonoBehaviour {
         titleText.text = titleString;
 
         inputField.characterLimit = characterLimit;
+        inputField.placeholder.GetComponent<TextMeshProUGUI>().text = "Input in here >>>";
         inputField.onValidateInput = (string text, int charIndex, char addedChar) => {
             return ValidateChar(validCharacters, addedChar);
         };

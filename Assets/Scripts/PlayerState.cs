@@ -3,31 +3,31 @@ using UnityEngine;
 
 public abstract class PlayerState : IState
 {
-    protected PlayerController _player;
-    protected IStateMachine _machine;
-    private Animator _anim;
-    protected string _animName;
-    protected float _stateTimer;
+    protected PlayerController m_player;
+    protected IStateMachine m_machine;
+    private Animator m_anim;
+    protected string m_animName;
+    protected float m_stateTimer;
     public PlayerState(PlayerController player, IStateMachine stateMachine, string animName)
     {
-        _player = player;
-        _machine = stateMachine;
-        _animName = animName;
-        _anim = player._amin; // lấy Animator từ PlayerController
+        m_player = player;
+        m_machine = stateMachine;
+        m_animName = animName;
+        m_anim = player.m_amin; // lấy Animator từ PlayerController
     }
     public virtual void Enter()
     {
-        _stateTimer = 0;
-        _anim.SetBool(_animName, true);
+        m_stateTimer = 0;
+        m_anim.SetBool(m_animName, true);
     }
 
     public virtual void Excute()
     {
-        _stateTimer -= Time.deltaTime;
+        m_stateTimer -= Time.deltaTime;
     }
 
     public virtual void Exit()
     {
-        _anim.SetBool(_animName, false);
+        m_anim.SetBool(m_animName, false);
     }
 }
