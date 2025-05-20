@@ -1,13 +1,14 @@
+using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 
 public class TestTrigger : NetworkBehaviour
 {
     private NetworkVariable<int> m_SomeValue = new NetworkVariable<int>(writePerm: NetworkVariableWritePermission.Owner);
-
+    [SerializeField] private GameObject effectPrefab;
+    private GameObject effect;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Chỉ xử lý trên server để tránh lỗi sync
         if (!IsServer) return;
 
         Debug.Log("Trigger detected on server");
@@ -23,16 +24,6 @@ public class TestTrigger : NetworkBehaviour
         };
         
     }
-    void Update()
-    {
-        if(IsOwner)
-        {
-            if(Input.GetKeyDown(KeyCode.Space))
-                m_SomeValue.Value += 1;
-        }
-        
-    }
-
     [ServerRpc]
     public void DestroyServerRpc()
     {
@@ -41,6 +32,9 @@ public class TestTrigger : NetworkBehaviour
     [ClientRpc]
     void HideClientRpc()
     {
-        gameObject.SetActive(false); // Hoặc thực hiện hiệu ứng "biến mất"
+        effect = ObjectPool.Instance.GetObject(effectPrefab,transform.position,Quaternion.identity);
+        ParticleSystem particleSystem= effect.GetComponent<ParticleSystem>();
+        particleSystem?.Play();
+        gameObject.SetActive(false);
     }
 }

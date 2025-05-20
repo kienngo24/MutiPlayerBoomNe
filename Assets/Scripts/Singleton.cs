@@ -29,7 +29,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    // Optional: Clean up when quitting
     protected virtual void OnApplicationQuit()
     {
         _isQuitting = true;

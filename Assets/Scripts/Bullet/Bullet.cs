@@ -37,9 +37,14 @@ public class Bullet : MonoBehaviour
         }       
 
     }
+    private void OnTriggerEnter2D(Collider2D other) {
+        ObjectPool.Instance.ReturnObject(gameObject);
+    }
+
+
     public void SpawnTrailRpc()
     {
-        GameObject trailToReturn = ObjectPool.Instance.GetObject(trailPrefab, transform.position,Quaternion.identity);
+        GameObject trailToReturn = ObjectPool.Instance.GetObject(trailPrefab, transform.position, Quaternion.identity);
         ObjectPool.Instance.ReturnObject(trailToReturn, 0.3f);
     }
     
