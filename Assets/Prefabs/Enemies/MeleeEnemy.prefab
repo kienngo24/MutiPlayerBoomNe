@@ -451,6 +451,7 @@ GameObject:
   - component: {fileID: 649960404737854337}
   - component: {fileID: 4461259410727741583}
   - component: {fileID: 2787404904788428740}
+  - component: {fileID: 2313126462091311443}
   m_Layer: 11
   m_Name: MeleeEnemy
   m_TagString: Enemy
@@ -671,6 +672,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  effectPrefab: {fileID: 7720613928446317375, guid: 2446e268cef3e364f943b48392e71ed3, type: 3}
+--- !u!114 &2313126462091311443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1468322549868622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46639530ba808374bad92e57c004666a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 20
+  turnSpeed: 1
+  _anim: {fileID: 0}
+  target: {fileID: 0}
 --- !u!1 &1724561593432388
 GameObject:
   m_ObjectHideFlags: 0

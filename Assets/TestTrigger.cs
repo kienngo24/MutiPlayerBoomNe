@@ -14,7 +14,7 @@ public class TestTrigger : NetworkBehaviour
         Debug.Log("Trigger detected on server");
         DestroyServerRpc();
     }
-    
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -22,19 +22,28 @@ public class TestTrigger : NetworkBehaviour
         {
             Debug.Log(NetworkManager.Singleton.LocalClientId + " " + newValue);
         };
-        
+
     }
     [ServerRpc]
     public void DestroyServerRpc()
     {
         HideClientRpc();
+        gameObject.GetComponent<NetworkObject>().Despawn();
+
     }
     [ClientRpc]
     void HideClientRpc()
     {
-        effect = ObjectPool.Instance.GetObject(effectPrefab,transform.position,Quaternion.identity);
-        ParticleSystem particleSystem= effect.GetComponent<ParticleSystem>();
+        effect = ObjectPool.Instance.GetObject(effectPrefab, transform.position, Quaternion.identity);
+        ParticleSystem particleSystem = effect.GetComponent<ParticleSystem>();
         particleSystem?.Play();
-        gameObject.SetActive(false);
+        ObjectPool.Instance.ReturnObject(effect, 1);
+        // gameObject.SetActive(false);
     }
+    // [ServerRpc(RequireOwnership = false)]
+    // public void RequestDespawnServerRpc()
+    // {
+    //     // Nếu enemy bị bắn thì server xử lý despawn
+    //     NetworkObject.Despawn(true);
+    // }
 }

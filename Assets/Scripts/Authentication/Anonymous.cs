@@ -8,6 +8,7 @@ public class Anonymous : IAuthentication
 
     public async void AuthenticationAsync()
     {
+        Debug.Log("Sign in");
         try
         {
             if (!_isInitialized)
