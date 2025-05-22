@@ -14,6 +14,7 @@ public class GameModeSelection_UI : MonoBehaviour
         {
             GameObject newRoom =  Instantiate(prefabRoom);
             newRoom.transform.SetParent(transform);
+            newRoom.transform.localScale = new Vector3(1, 1, 1);
             UILobbyListCreated lobbyCreateScript = newRoom.GetComponent<UILobbyListCreated>();
             lobbyCreateScript.SetUpData(room);
         }
