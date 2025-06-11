@@ -33,7 +33,6 @@ public class PLayerStateMachine : IStateMachine
         
 
     }
-    
     public void SetState(IState curState) => _curState = curState;
     public IState GetState<T>() where T : IState => _statesDirtionary[typeof(T)];
     
@@ -44,6 +43,6 @@ public class PLayerStateMachine : IStateMachine
         if (_curState != null)
            _curState.Excute();
     }
-    
 
+    public IState GetCurrentState() => _curState;
 }

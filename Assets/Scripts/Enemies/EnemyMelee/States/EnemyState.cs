@@ -3,21 +3,25 @@ using UnityEngine;
 
 public abstract class EnemyState : IState
 {
-    protected Enemy m_enemy;
-    protected IStateMachine m_machine;
+    protected Enemy _enemy;
+    protected IStateMachine _machine;
     private Animator m_anim;
     protected string m_animName;
-    protected float m_stateTimer;
+    protected float _stateTimer;
+
+    public bool Istrigger { get; set; }
+
     public EnemyState(Enemy enemy, IStateMachine stateMachine, string animName)
     {
-        m_enemy = enemy;
-        m_machine = stateMachine;
+        _enemy = enemy;
+        _machine = stateMachine;
         m_animName = animName;
         m_anim = enemy._anim; 
     }
     public virtual void Enter()
     {
-        m_stateTimer = 0;
+        Istrigger = false;
+        _stateTimer = 0;
         m_anim.SetBool(m_animName, true);
     }
     public void FindTarget()
@@ -26,11 +30,12 @@ public abstract class EnemyState : IState
     }
     public virtual void Excute()
     {
-        m_stateTimer -= Time.deltaTime;
+        _stateTimer -= Time.deltaTime;
     }
 
     public virtual void Exit()
     {
         m_anim.SetBool(m_animName, false);
     }
+    public void SetAnimationTrigger() => Istrigger = true;
 }

@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ManagerTimeLobby : Singleton<ManagerTimeLobby>
+public class ManagerTimeLobby
 {
     private float refreshCooldown = 1.1f;
     private int maxCountToRefresh = 2;

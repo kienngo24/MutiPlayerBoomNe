@@ -29,6 +29,4 @@ public class SpawnTrail : NetworkBehaviour
         GameObject trailToReturn = ObjectPool.Instance.GetObject(trail, position,rotation);
         ObjectPool.Instance.ReturnObject(trailToReturn, 0.3f);
     }
-    
-
 }

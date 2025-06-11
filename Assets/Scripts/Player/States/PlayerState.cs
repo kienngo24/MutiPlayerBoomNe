@@ -8,6 +8,9 @@ public abstract class PlayerState : IState
     private Animator m_anim;
     protected string m_animName;
     protected float m_stateTimer;
+
+    public bool Istrigger { get; set; }
+
     public PlayerState(PlayerController player, IStateMachine stateMachine, string animName)
     {
         m_player = player;
@@ -17,6 +20,7 @@ public abstract class PlayerState : IState
     }
     public virtual void Enter()
     {
+        Istrigger = false;
         m_stateTimer = 0;
         m_anim.SetBool(m_animName, true);
     }
@@ -30,4 +34,5 @@ public abstract class PlayerState : IState
     {
         m_anim.SetBool(m_animName, false);
     }
+    public void SetAnimationTrigger() => Istrigger = true;
 }

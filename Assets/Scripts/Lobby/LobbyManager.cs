@@ -81,7 +81,7 @@ public class LobbyManager : Singleton<LobbyManager>
             //     lastRefreshTimer = Time.time;
             //     RefreshLobbyList();
             // }
-            ManagerTimeLobby.Instance.RequestRefreshLobbyServerRpc();
+            //ManagerTimeLobby.Instance.RequestRefreshLobbyServerRpc();
         }
     }
     private async void HandleLobbyPolling() {

@@ -5,6 +5,7 @@ using UnityEngine;
 public interface IStateMachine
 {
     void CreateState();
+    IState GetCurrentState();
     void Init<T>()  where T : IState;
     void ChangeState<T>() where T : IState;
     void SetState(IState curState);

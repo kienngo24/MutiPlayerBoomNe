@@ -16,7 +16,8 @@ public class EnemyMeleeStateFactory : IStateFactory
         var Playerdictionary = new Dictionary<Type, IState>
         {
             {typeof(IdleState_EnemyMelee), new IdleState_EnemyMelee(_enemy, _machine, "Idle")},
-            {typeof(MoveState_EnemyMelee), new MoveState_EnemyMelee(_enemy, _machine, "Move")}
+            {typeof(MoveState_EnemyMelee), new MoveState_EnemyMelee(_enemy, _machine, "Move")},
+            {typeof(AttackState_EnemyMelee), new AttackState_EnemyMelee(_enemy, _machine, "Attack")},
         };
         return Playerdictionary;
     }

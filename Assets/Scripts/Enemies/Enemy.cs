@@ -1,19 +1,35 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
 {
-    public float speed;
-    public float turnSpeed;
+    [Header("Enemy Info")]
+    public float speed = 20;
+    public float turnSpeed = 5;
+    [Header("Enemy Attack")]
+    [SerializeField] private Transform attackPoint;
+
+
+
+    public bool facingRight = true;
+    public int facingDir = 1;
+
+    public float attackRange;
+    public float damage;
+    public Rigidbody2D rb;
+
     public Animator _anim;
     public Transform target;
     protected IStateMachine _enemySM;
     protected virtual void Awake()
     {
-        _anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        _anim = GetComponentInChildren<Animator>();
         _enemySM = new EnemyMeleeStateMachine(this);
-        Invoke(nameof(FindTarget), 1);
+        FindTarget();
+        SetupDefaultDir(false);
     }
     public void FindTarget()
     {
@@ -25,6 +41,48 @@ public abstract class Enemy : MonoBehaviour
     }
     protected virtual void Update()
     {
+        if (target == null)
+            return;
 
+        int newDirection = (target.position.x < transform.position.x) ? -1 : 1;
+        if (newDirection != facingDir)
+        {
+            Debug.Log("ChangeDir");
+            FlipController(newDirection);
+        }
     }
+    public void Flip()
+    {
+        facingDir *= -1;
+        facingRight = !facingRight;
+        transform.Rotate(0, 180, 0);
+    }
+    public void FlipController(float _x)
+    {
+        if (_x > 0 && !facingRight)
+            Flip();
+        else if (_x < 0 && facingRight)
+            Flip();
+    }
+    public void SetupDefaultDir(bool right)
+    {
+        if(right)
+        {
+            facingDir = 1;
+            facingRight = right;
+        }
+        else
+        {
+            facingDir = -1;
+            facingRight = right;
+        }
+    }
+    public bool CanAttack() => Vector2.Distance(attackPoint.position, target.position) < attackRange;
+    public void AnimationtriggerBase() => _enemySM.GetCurrentState().SetAnimationTrigger();
+    protected virtual void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+
 }

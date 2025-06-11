@@ -10,21 +10,24 @@ public class MoveState_EnemyMelee : GroundState_EnemyMelee
     
     public override void Enter()
     {
-        target = m_enemy.target;
+        target = _enemy.target;
         base.Enter();
     }
     public override void Excute()
     {
         base.Excute();
+        
         if (target == null)
         {
-            m_machine.ChangeState<IdleState_EnemyMelee>();
+            _machine.ChangeState<IdleState_EnemyMelee>();
             return;
         }
-        m_enemy.transform.position = Vector3.MoveTowards(m_enemy.transform.position,target.transform.position,m_enemy.speed * Time.deltaTime);
+        _enemy.transform.position = 
+                Vector3.MoveTowards(_enemy.transform.position,target.transform.position,_enemy.speed * Time.deltaTime);
     }
     public override void Exit()
     {
         base.Exit();
+        _enemy.transform.position += Vector3.zero;
     }
 }

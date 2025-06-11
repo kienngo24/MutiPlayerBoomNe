@@ -43,6 +43,6 @@ public abstract class EnemyStateMachine : IStateMachine
         if (_curState != null)
            _curState.Excute();
     }
-    
 
+    public IState GetCurrentState() => _curState;
 }

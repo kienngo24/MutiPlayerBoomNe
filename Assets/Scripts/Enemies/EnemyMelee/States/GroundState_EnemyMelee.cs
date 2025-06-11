@@ -14,6 +14,8 @@ public class GroundState_EnemyMelee : EnemyState
     public override void Excute()
     {
         base.Excute();
+        if (_enemy.CanAttack())
+            _machine.ChangeState<AttackState_EnemyMelee>();
     }
     public override void Exit()
     {

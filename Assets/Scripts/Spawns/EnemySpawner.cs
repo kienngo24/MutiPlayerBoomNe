@@ -6,15 +6,21 @@ public class EnemySpawner : NetworkBehaviour
 {
     [SerializeField] private Transform enemyMelee;
     public float spawnCooldown;
+    public int quality = 10;
+    private int currentQuality =0;
     private float lastSpawnTimer;
     private void Update()
     {
         if (!IsServer)
             return;
+        if (currentQuality >= quality)
+            return;
+        
         if (Time.time > lastSpawnTimer + spawnCooldown)
         {
             lastSpawnTimer = Time.time;
             SpawnEnemy();
+            currentQuality++;
         }
     }
 

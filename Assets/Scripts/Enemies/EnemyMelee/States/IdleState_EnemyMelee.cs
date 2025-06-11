@@ -10,14 +10,14 @@ public class IdleState_EnemyMelee : GroundState_EnemyMelee
     public override void Enter()
     {
         base.Enter();
-        m_stateTimer = 1;
+        _stateTimer = 1;
     }
     public override void Excute()
     {
         base.Excute();
-        if (m_stateTimer < 0)
+        if (_stateTimer < 0)
         {
-            m_machine.ChangeState<MoveState_EnemyMelee>();        
+            _machine.ChangeState<MoveState_EnemyMelee>();        
         }
     }
     public override void Exit()
