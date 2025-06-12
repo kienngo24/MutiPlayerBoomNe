@@ -1,10 +1,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MoveState_EnemyMinion : GroundState_EnemyMinion
+public class MoveState_EnemySummoner : GroundState_EnemySummoner
 {
     private Transform target;
-    public MoveState_EnemyMinion(Enemy enemy, IStateMachine stateMachine, string animName) : base(enemy, stateMachine, animName)
+    public MoveState_EnemySummoner(Enemy enemy, IStateMachine stateMachine, string animName) : base(enemy, stateMachine, animName)
     {
     }
 
@@ -19,7 +19,7 @@ public class MoveState_EnemyMinion : GroundState_EnemyMinion
 
         if (target == null)
         {
-            _machine.ChangeState<IdleState_EnemyMinion>();
+            _machine.ChangeState<IdleState_EnemySummoner>();
             return;
         }
         _enemy.transform.position =

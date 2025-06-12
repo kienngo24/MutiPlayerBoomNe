@@ -15,7 +15,7 @@ public class GroundState_EnemyMelee : EnemyState
     {
         base.Excute();
         if (_enemy.CanAttack())
-            _machine.ChangeState<AttackState_EnemyMinion>();
+            _machine.ChangeState<AttackState_EnemyMelee>();
     }
     public override void Exit()
     {

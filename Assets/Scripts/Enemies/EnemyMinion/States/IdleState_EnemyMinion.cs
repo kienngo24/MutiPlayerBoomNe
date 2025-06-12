@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class IdleState_EnemyMinion : GroundState_EnemyMelee
+public class IdleState_EnemyMinion : GroundState_EnemyMinion
 {
     public IdleState_EnemyMinion(Enemy enemy, IStateMachine stateMachine, string animName) : base(enemy, stateMachine, animName)
     {

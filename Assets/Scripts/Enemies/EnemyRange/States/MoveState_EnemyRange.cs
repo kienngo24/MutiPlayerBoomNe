@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MoveState_EnemyRange : GroundState_EnemyMelee
+public class MoveState_EnemyRange : GroundState_EnemyRange
 {
     private Transform target;
     public MoveState_EnemyRange(Enemy enemy, IStateMachine stateMachine, string animName) : base(enemy, stateMachine, animName)

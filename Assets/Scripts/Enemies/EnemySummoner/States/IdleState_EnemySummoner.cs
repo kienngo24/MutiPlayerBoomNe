@@ -1,9 +1,9 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class IdleState_EnemyRange : GroundState_EnemyRange
+public class IdleState_EnemySummoner : GroundState_EnemySummoner
 {
-    public IdleState_EnemyRange(Enemy enemy, IStateMachine stateMachine, string animName) : base(enemy, stateMachine, animName)
+    public IdleState_EnemySummoner(Enemy enemy, IStateMachine stateMachine, string animName) : base(enemy, stateMachine, animName)
     {
     }
 
@@ -17,7 +17,7 @@ public class IdleState_EnemyRange : GroundState_EnemyRange
         base.Excute();
         if (_stateTimer < 0)
         {
-            _machine.ChangeState<MoveState_EnemyRange>();
+            _machine.ChangeState<MoveState_EnemySummoner>();
         }
     }
     public override void Exit()

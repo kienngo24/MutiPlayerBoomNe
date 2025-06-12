@@ -7,7 +7,6 @@ public abstract class Enemy : MonoBehaviour
 {
     [Header("Enemy Info")]
     public float speed = 20;
-    public float turnSpeed = 5;
     [Header("Enemy Attack")]
     [SerializeField] private Transform attackPoint;
 
