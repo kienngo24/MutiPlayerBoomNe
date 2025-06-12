@@ -18,6 +18,7 @@ public abstract class Enemy : MonoBehaviour
 
     public float attackRange;
     public float damage;
+    [HideInInspector]
     public Rigidbody2D rb;
 
     public Animator _anim;
@@ -27,7 +28,6 @@ public abstract class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         _anim = GetComponentInChildren<Animator>();
-        _enemySM = new EnemyMeleeStateMachine(this);
         FindTarget();
         SetupDefaultDir(false);
     }
@@ -66,7 +66,7 @@ public abstract class Enemy : MonoBehaviour
     }
     public void SetupDefaultDir(bool right)
     {
-        if(right)
+        if (right)
         {
             facingDir = 1;
             facingRight = right;

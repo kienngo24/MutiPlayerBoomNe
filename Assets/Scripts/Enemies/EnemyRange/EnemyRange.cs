@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class EnemyMelee : Enemy
+public class EnemyRange : Enemy
 {
     protected override void Awake()
     {
         base.Awake();
-        _enemySM = new EnemyMeleeStateMachine(this);
+        _enemySM = new EnemeRangeStateMachine(this);
     }
     protected override void Start()
     {

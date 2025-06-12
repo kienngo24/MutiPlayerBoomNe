@@ -1,13 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
 public class EnemySpawner : NetworkBehaviour
 {
-    [SerializeField] private Transform enemyMelee;
+    [SerializeField] private List<Transform> enemies;
     public float spawnCooldown;
     public int quality = 10;
-    private int currentQuality =0;
+    private int currentQuality = 0;
     private float lastSpawnTimer;
     private void Update()
     {
@@ -15,19 +16,22 @@ public class EnemySpawner : NetworkBehaviour
             return;
         if (currentQuality >= quality)
             return;
-        
+
         if (Time.time > lastSpawnTimer + spawnCooldown)
         {
             lastSpawnTimer = Time.time;
-            SpawnEnemy();
+            foreach (Transform enemy in enemies)
+            {
+                SpawnEnemy(enemy);
+            }
             currentQuality++;
         }
     }
 
-    private void SpawnEnemy()
+    private void SpawnEnemy(Transform enemy)
     {
-        Transform enemy = Instantiate(enemyMelee);
-        enemy.GetComponent<NetworkObject>().Spawn();
+        Transform enemyScript = Instantiate(enemy);
+        enemyScript.GetComponent<NetworkObject>().Spawn();
     }
     [ServerRpc(RequireOwnership = false)]
     public void RequestDespawnServerRpc()
