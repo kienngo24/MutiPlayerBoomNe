@@ -2,10 +2,15 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-
+[Serializable]
+public class EnemySpawnerItem
+{
+    public bool active = true;
+    public Transform item;
+}
 public class EnemySpawner : NetworkBehaviour
 {
-    [SerializeField] private List<Transform> enemies;
+    [SerializeField] private List<EnemySpawnerItem> enemies;
     public float spawnCooldown;
     public int quality = 10;
     private int currentQuality = 0;
@@ -20,9 +25,10 @@ public class EnemySpawner : NetworkBehaviour
         if (Time.time > lastSpawnTimer + spawnCooldown)
         {
             lastSpawnTimer = Time.time;
-            foreach (Transform enemy in enemies)
+            foreach (EnemySpawnerItem enemy in enemies)
             {
-                SpawnEnemy(enemy);
+                if (enemy.active)
+                    SpawnEnemy(enemy.item);
             }
             currentQuality++;
         }

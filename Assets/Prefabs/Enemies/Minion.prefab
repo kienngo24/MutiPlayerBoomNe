@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1582082801869438311}
   - component: {fileID: 4407676084993765648}
   - component: {fileID: 6247301893613949152}
+  - component: {fileID: 7120784937473339638}
   m_Layer: 11
   m_Name: Minion
   m_TagString: Enemy
@@ -37,6 +38,7 @@ Transform:
   m_Children:
   - {fileID: 4727980760923560}
   - {fileID: 6840333621874149806}
+  - {fileID: 2202173988041024218}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &61561631312040642
@@ -211,7 +213,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 7720613928446317375, guid: 2446e268cef3e364f943b48392e71ed3, type: 3}
+--- !u!114 &7120784937473339638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020661588314244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 304c79798cfaa6e4b980b0bf03ef88c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 20
+  turnSpeed: 5
+  attackPoint: {fileID: 2202173988041024218}
+  facingRight: 1
+  facingDir: 1
+  attackRange: 3.5
+  damage: 0
+  rb: {fileID: 0}
+  _anim: {fileID: 0}
+  target: {fileID: 0}
 --- !u!1 &1170243814997124
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,6 +848,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &5946118037424311103
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2202173988041024218}
+  m_Layer: 11
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2202173988041024218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5946118037424311103}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.52, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4886414481344706}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7180433161281915176
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,6 +889,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6840333621874149806}
   - component: {fileID: 671903478943223072}
+  - component: {fileID: 62877091255124369}
   m_Layer: 11
   m_Name: Animation
   m_TagString: Untagged
@@ -881,3 +937,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &62877091255124369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7180433161281915176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e48c49fe0c3762448053cebc5612956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

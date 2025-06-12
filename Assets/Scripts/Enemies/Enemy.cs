@@ -20,7 +20,7 @@ public abstract class Enemy : MonoBehaviour
     public float damage;
     [HideInInspector]
     public Rigidbody2D rb;
-
+    [HideInInspector]
     public Animator _anim;
     public Transform target;
     protected IStateMachine _enemySM;
